@@ -16,6 +16,7 @@ namespace DamianIonutLab7.Data
             _database.CreateTableAsync<ShopList>().Wait();
             _database.CreateTableAsync<Product>().Wait();
             _database.CreateTableAsync<ListProduct>().Wait();
+            _database.CreateTableAsync<Shop>().Wait();
         }
         public Task<int> SaveProductAsync(Product product) { 
             if (product.ID != 0) {
@@ -80,6 +81,31 @@ namespace DamianIonutLab7.Data
                 return await _database.DeleteAsync(listProduct);
             }
             return 0;
+        }
+
+        public Task<List<Shop>> GetShopsAsync()
+        {
+            return _database.Table<Shop>().ToListAsync();
+        }
+
+        public Task<int> SaveShopAsync(Shop shop)
+        {
+            if (shop.ID != 0)
+            {
+                // Actualizează un magazin existent (ID != 0)
+                return _database.UpdateAsync(shop);
+            }
+            else
+            {
+                // Inserează un magazin nou (ID == 0)
+                return _database.InsertAsync(shop);
+            }
+        }
+
+        public Task<int> DeleteShopAsync(Shop shop)
+        {
+            // Utilizează metoda DeleteAsync a conexiunii SQLite pentru a șterge magazinul
+            return _database.DeleteAsync(shop);
         }
     }
 }
